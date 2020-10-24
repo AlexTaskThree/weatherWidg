@@ -1,0 +1,63 @@
+@isTest
+private class WeatherControllerTest {
+    @isTest static void testGet()
+    {
+        test.setMock(HttpCalloutMock.class, new WeatherControllerHttpMock());
+		StaticResourceCalloutMock mock = new StaticResourceCalloutMock();
+        mock.setStaticResource('GetWeater');
+        mock.setStatusCode(200);
+        mock.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        Http http = new Http();
+		WeatherController.weatherUrl('da');
+        
+        WeatherController.getWeatherObs('Brest');
+    }
+    @isTest
+    static void testgeolocationTrue(){
+        
+       
+        List<City__c> CustomCity1 = new List<City__c>();
+        City__c test1 = new City__c(Name = 'Brest');
+        CustomCity1.add(test1);
+        insert test1;
+        string testCity1 = WeatherController.resolveGeolocation();
+        
+        String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@testorg.com';
+        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
+        User u = new User(Alias = 'standt', Email='standarduser@testorg.com',
+        EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
+        LocaleSidKey='en_US', ProfileId = p.Id,
+        TimeZoneSidKey='America/Los_Angeles',
+        UserName=uniqueUserName, City = 'Irak');
+        if(u.City != NULL){
+            testCity1 = u.City;
+        }
+        else{
+            testCity1 = CustomCity1[0].Name;
+        }
+		system.assertEquals('Irak', testCity1); 
+    } 
+    @isTest
+     static void testgeolocationFolse (){
+        List<City__c> CustomCity2 = new List<City__c>();
+        City__c test2 = new City__c(Name = 'Riga');
+        CustomCity2.add(test2);
+        insert test2;
+        string testCity2 = WeatherController.resolveGeolocation();
+        
+         String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@testorg.com';
+        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
+        User u = new User(Alias = 'standt', Email='standarduser@testorg.com',
+        EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
+        LocaleSidKey='en_US', ProfileId = p.Id,
+        TimeZoneSidKey='America/Los_Angeles',
+        UserName=uniqueUserName, City = NULL);
+        if(u.City != NULL){
+            testCity2 = u.City;
+        }
+        else{
+            testCity2 = CustomCity2[0].Name;
+        }
+		system.assertEquals('Riga', testCity2);
+     }
+}
