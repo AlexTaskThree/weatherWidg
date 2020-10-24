@@ -1,0 +1,39 @@
+global class WeatherController{
+    global static String weatherUrl(String URL){
+        
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(URL);
+        req.setMethod('GET');
+        Http http = new Http();
+        HTTPResponse res = http.send(req); 
+        system.debug(res);
+        return res.getBody();
+        
+    }
+    global static String resolveGeolocation(){
+       	String Wheathercity;
+        String userId = UserInfo.getUserId();
+        List<User> users = [SELECT Id, City FROM User WHERE Id =:userId LIMIT 1];
+        if (users[0].City != null) {
+            Wheathercity = users[0].City;
+        } else {
+            List<city_name__mdt> cityCustom = [SELECT City__c FROM city_name__mdt LIMIT 1];
+            Wheathercity = cityCustom[0].City__c;
+            system.debug(Wheathercity);
+        }
+		return Wheathercity;
+    }
+     @AuraEnabled
+    global static String getWeatherObs(String cityLoc) {
+        String geoLocation;
+        if(cityLoc !=NULL){
+            geoLocation = cityLoc;
+        }
+        else{
+            geoLocation = resolveGeoLocation();
+        }
+        String URL ='https://api.openweathermap.org/data/2.5/weather?q='+geoLocation+'&APPID=f6e0c3da6d8ae58af6a63fd47bfe970e';
+        System.debug(URL);
+        return weatherUrl(URL);
+    }
+}
