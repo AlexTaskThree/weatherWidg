@@ -1,0 +1,50 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" controller="WeatherController" access='global' >
+    <aura:handler name ="init" action ="{!c.getWeather}" value="{!this}"/>
+    <aura:attribute name ="today" type ="Date"></aura:attribute>
+    <aura:attribute name="weatherInCity" type="Object"></aura:attribute>
+    <aura:attribute name="City" type="Object" default=''></aura:attribute>
+    <aura:attribute name="urlIcon" type="String"></aura:attribute>
+    <aura:attribute name="clear" type="Object" default=''></aura:attribute>
+    <div aria-labelledby="newexpenseform">
+        <!-- BOXED AREA -->
+        <fieldset class="slds-box slds-theme--default slds-container--small">
+        <legend id="newexpenseform" class="slds-text-heading--large 
+          slds-p-vertical--medium">
+          Weather
+        </legend>
+            <div class="slds-align_absolute-center">
+            	<div class="slds-grid slds-gutters">
+                    <div class="slds-no-flex  slds-align-bottom slds-shrink slds-col">
+                        <lightning:input aura:id="city" value="{!v.clear}" placeholder="Current Location" />
+                    </div>
+                    <div class="slds-no-flex  slds-align-bottom slds-col">
+                        <lightning:button label="Search" onclick="{! c.handleClick }"/>  
+                    </div>
+           		</div>
+            </div>
+             <div class="slds-align_absolute-center ">
+            
+                <div class="slds-col slds-text-heading_large slds-grid slds-grid_vertical">
+                    <br/>
+                    Date:
+                        <ui:outputDate value="{!v.today}"/>
+                </div>
+                <div class="slds-col">
+               
+                        <img width="80"  src="{!v.urlIcon}"></img>
+                 
+                </div>
+                <br/>
+               <div class="slds-grid slds-gutters">
+                   <div class="slds-col slds-text-heading_large">
+                   	{!v.City},
+                   </div>
+                   <div class="slds-col slds-text-heading_large">
+           			 {!v.weatherInCity}°C
+       				 </div>
+                </div>
+            
+                 </div>
+        </fieldset>
+    </div>
+</aura:component>
