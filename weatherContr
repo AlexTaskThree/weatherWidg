@@ -1,0 +1,21 @@
+({
+    getWeather:function(component, event, helper){
+        helper.getWeather(component,event);    
+    },
+     handleClick:function(component, event, helper){
+        var city = component.find('city');
+        var xpCity = city.get('v.value');
+        console.log(xpCity);
+        var action = component.get('c.getWeatherObs');
+       	action.setParams({cityLoc: xpCity});
+        action.setCallback(this,function(response){
+            var newJSON = JSON.parse(response.getReturnValue());
+            var state = response.getState();
+            if(state === 'SUCCESS'){
+               helper.doInit(component,newJSON);
+            }
+       });
+       $A.enqueueAction(action);  
+       component.set("v.clear","");
+    }
+})
