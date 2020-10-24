@@ -1,0 +1,34 @@
+({
+    getWeather: function(component, event,helper) {
+        this.doInit(component);
+    },
+
+    doInit:function(component, newJSON){
+        var action = component.get("c.getWeatherObs");
+        action.setCallback(this,function(resp){
+            console.log(newJSON);
+            if(newJSON != undefined){
+               var jsonWeather = newJSON;
+            }
+            else{
+               var jsonWeather = JSON.parse(resp.getReturnValue());
+            }
+            console.log(resp.getReturnValue());
+			var TempC =(Math.round(jsonWeather.main.temp -273));
+            var City = jsonWeather.name;
+            var codeImg = jsonWeather.weather[0].icon;
+            var icon = "http://openweathermap.org/img/w/"+codeImg+".png"
+            console.log(icon);
+            component.set("v.urlIcon", icon)
+            component.set("v.weatherInCity",TempC);
+            component.set("v.City",City);
+            var today = new Date();
+            var day = String(today.getDate()).padStart(2, '0');
+            var month = String(today.getMonth() + 1).padStart(2, '0');
+            var year = today.getFullYear();
+            today = day + ':' + month + ':' + year;
+            component.set('v.today', today);
+        });
+    $A.enqueueAction(action);  
+	}
+ })
