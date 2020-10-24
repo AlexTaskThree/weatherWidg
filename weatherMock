@@ -1,0 +1,10 @@
+global class WeatherControllerHttpMock implements HttpCalloutMock {
+    global HTTPResponse respond(HTTPRequest req)
+    {
+        HTTPResponse res = new HTTPResponse();
+        res.setHeader('Content-Type', 'application/json');
+        res.setBody('[{"coord":{"lon":23.7,"lat":52.1},"weather":[{"id":804,"main":"Clouds","description":"overcast clouds","icon":"04d"}],"base":"stations","main":{"temp":276.15,"feels_like":268,"temp_min":276.15,"temp_max":276.15,"pressure":1016,"humidity":86},"visibility":8000,"wind":{"speed":9,"deg":300,"gust":14},"clouds":{"all":90},"dt":1579694723,"sys":{"type":1,"id":8930,"country":"BY","sunrise":1579674014,"sunset":1579704755},"timezone":10800,"id":629634,"name":"Brest","cod":200}]');
+        res.setStatusCode(200);
+        return res;                                
+    }
+}
